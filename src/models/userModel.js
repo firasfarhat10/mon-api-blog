@@ -13,11 +13,13 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
       trim: true,
-      match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Format d'email invalide (ex : aya@polytechnique.tn)"]
+      match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Format d'email invalide"]
     },
-    age: {
-      type: Number,
-      min: [4, "L'age minimum autorise est de 4 ans"]
+    // Contient le HASH bcrypt (60 caractères), jamais le mot de passe en clair.
+    // La longueur minimale du mot de passe saisi est vérifiée dans le contrôleur, avant le hachage.
+    password: {
+      type: String,
+      required: [true, 'Le mot de passe est obligatoire']
     },
     role: {
       type: String,
@@ -27,7 +29,11 @@ const userSchema = new mongoose.Schema(
       },
       default: 'user'
     },
-    // Exercice 1
+    age: {
+      type: Number,
+      min: [4, "L'age minimum autorise est de 4 ans"]
+    },
+    // Champs de l'exercice 1 de la séance 3
     bio: {
       type: String,
       trim: true,
@@ -39,7 +45,7 @@ const userSchema = new mongoose.Schema(
       match: [/^\d{8}$/, 'Numero de 8 chiffres requis']
     }
   },
-  { timestamps: true } // createdAt et updatedAt automatiques
+  { timestamps: true }
 );
  
 module.exports = mongoose.model('User', userSchema);
